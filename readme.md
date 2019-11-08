@@ -17,6 +17,7 @@ tools
 | create_logger | create log in file |
 | read_excel | get data from excel |
 | parse_list | parse list which the first one is key and others is value |
+| json_to_csv | create a csv file which is the same name of json  |
 
 
 

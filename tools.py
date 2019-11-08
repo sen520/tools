@@ -26,6 +26,12 @@ def data_to_json(data, name):
         fo.write(json.dumps(data, ensure_ascii=False, indent=2, separators=(',', ': ')))
 
 
+def json_to_csv(name):
+    with open(name) as f:
+        a = json.loads(f.read())
+        write_csv(name, a)
+
+
 def sort_dict(data, field):
     """
     sort dict
