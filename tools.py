@@ -3,10 +3,11 @@ import json
 import logging
 import operator
 import re
+import datetime
+import os
 
 import pandas as pd
 import requests
-import os
 import csv
 import xlrd
 
@@ -140,6 +141,26 @@ def create_logger(name):
     return log
 
 
+def create_log_decorator(filename='log'):
+    def logger(func):
+        def write_file(*args, **kwargs):
+            log = create_logger(filename + '.log')
+            start_time = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S.%f")
+            log.debug('\nstart time: ' + start_time)
+            log.debug('func: ' + func.__name__ + '\nargs: ' + str(args) + '\nkwargs:' + str(kwargs))
+            try:
+                func(*args, **kwargs)
+            except Exception as e:
+                log.error(e)
+                raise e
+            end_time = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S.%f")
+            log.debug('end time: ' + end_time)
+
+        return write_file
+
+    return logger
+
+
 def read_excel(filename, sheet=None):
     """
     read excel and parse every line
@@ -173,9 +194,21 @@ def parse_list(data):
 
 
 if __name__ == '__main__':
-    d = [{'date': '2019-06-01', 'ht': '25', 'lt': '12', 'weather': '多云', 'wind_dir': '西南风', 'wind_value': '5级'},
-         {'date': '2019-06-27', 'ht': '28', 'lt': '16', 'weather': '多云', 'wind_dir': '西南风', 'wind_value': '4级'},
-         {'date': '2019-06-28', 'ht': '26', 'lt': '13', 'weather': '多云', 'wind_dir': '西北风', 'wind_value': '5级'},
-         {'date': '2019-06-29', 'ht': '20', 'lt': '11', 'weather': '阴', 'wind_dir': '东北风', 'wind_value': '2级'},
-         {'date': '2019-06-30', 'ht': '23', 'lt': '13', 'weather': '晴', 'wind_dir': '东北风', 'wind_value': '2级'}]
-    write_csv('a', d)
+    # d = [{'date': '2019-06-01', 'ht': '25', 'lt': '12', 'weather': '多云', 'wind_dir': '西南风', 'wind_value': '5级'},
+    #      {'date': '2019-06-27', 'ht': '28', 'lt': '16', 'weather': '多云', 'wind_dir': '西南风', 'wind_value': '4级'},
+    #      {'date': '2019-06-28', 'ht': '26', 'lt': '13', 'weather': '多云', 'wind_dir': '西北风', 'wind_value': '5级'},
+    #      {'date': '2019-06-29', 'ht': '20', 'lt': '11', 'weather': '阴', 'wind_dir': '东北风', 'wind_value': '2级'},
+    #      {'date': '2019-06-30', 'ht': '23', 'lt': '13', 'weather': '晴', 'wind_dir': '东北风', 'wind_value': '2级'}]
+    # write_csv('a', d)
+    import time
+
+
+    @create_log_decorator('test')
+    def test(a, b, o):
+        print(a + b)
+        print(o)
+        print('test')
+        time.sleep(3)
+
+
+    test(1, 2, {'t': 'test'})
