@@ -1,9 +1,8 @@
 | Filename                  | Description                                 |
 | ------------------------- | ------------------------------------------- |
-| js_dict_to_markdown_table | javascript from an object to markdown table |
 | city                      | Urban information in some countries         |
 
-tools
+tools.py
 
 | name | function |
 | ------------------------- | ------------------------------------------- |
@@ -19,5 +18,11 @@ tools
 | parse_list | parse list which the first one is key and others is value |
 | json_to_csv | create a csv file which is the same name of json  |
 
+tools.js
+
+| name | function |
+| ------------------------- | ------------------------------------------- |
+| createTable | javascript from an object to markdown table |
+| is_array | weather one value is array or not |
 
 
