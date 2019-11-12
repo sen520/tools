@@ -23,6 +23,5 @@ tools.js
 | name | function |
 | ------------------------- | ------------------------------------------- |
 | createTable | javascript from an object to markdown table |
-| is_array | weather one value is array or not |
 
 

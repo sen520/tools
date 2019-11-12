@@ -10,12 +10,3 @@ function createTable(table) {
   }
   return result.join('\n');
 }
-
-
-const is_array = (value) => {
-  return value &&
-    typeof value === 'object' &&
-    typeof value.length === 'number' &&
-    typeof value.splice === 'function' &&
-    !(value.propertyIsEnumerable('length'));
-};
