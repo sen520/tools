@@ -10,3 +10,9 @@ function createTable(table) {
   }
   return result.join('\n');
 }
+
+
+var parse_number = /^-?\d+(?:\.\d*)?(?:e[+\-]?\d+)?$/i;
+var isNumber = (num) => {
+  return parse_number.test(num)
+};
