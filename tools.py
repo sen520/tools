@@ -160,6 +160,17 @@ def create_log_decorator(filename='log'):
 
     return logger
 
+def table_to_dict(browser):
+    result = {}
+    for row in browser.find_elements_by_xpath('//table//tr'):
+        columns = row.find_elements_by_xpath('td')
+        if len(columns) < 2:
+            continue
+        key = columns[0].text
+        value = columns[1].text
+        result[key] = value
+    return result
+
 
 def read_excel(filename, sheet=None):
     """
@@ -212,3 +223,5 @@ if __name__ == '__main__':
 
 
     test(1, 2, {'t': 'test'})
+
+
