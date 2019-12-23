@@ -1,7 +1,9 @@
+import hashlib
 import io
 import json
 import logging
 import operator
+import random
 import re
 import datetime
 import os
@@ -25,6 +27,29 @@ def write_csv(name, data_list):
 def data_to_json(data, name):
     with io.open(name + '.json', 'w', encoding='utf-8') as fo:
         fo.write(json.dumps(data, ensure_ascii=False, indent=2, separators=(',', ': ')))
+
+
+def pwd_hash(string):
+    """password hash"""
+    x = hashlib.sha256()
+    salt = ''
+    x.update((string + salt).encode())
+    return x.hexdigest()
+
+
+def password():
+    """生成随机数"""
+    ret = ''
+    for i in range(6):
+        num = random.randint(0, 9)
+        # num = chr(random.randint(48,57))#ASCII表示数字
+        letter_str = 'abcdefghjkmnpqrstuvwxyz'
+        LETTER_STR = 'ABCDEFGHJKMNPQRSTUVWXYZ'
+        letter = letter_str[random.randint(0, len(letter_str) - 1)]
+        LETTER = LETTER_STR[random.randint(0, len(letter_str) - 1)]
+        s = str(random.choice([num, letter, LETTER]))
+        ret += s
+    return ret
 
 
 def json_to_csv(name):
@@ -160,6 +185,7 @@ def create_log_decorator(filename='log'):
 
     return logger
 
+
 def table_to_dict(browser):
     result = {}
     for row in browser.find_elements_by_xpath('//table//tr'):
@@ -223,5 +249,3 @@ if __name__ == '__main__':
 
 
     test(1, 2, {'t': 'test'})
-
-
