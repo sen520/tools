@@ -255,9 +255,6 @@ if __name__ == '__main__':
     #      {'date': '2019-06-29', 'ht': '20', 'lt': '11', 'weather': '阴', 'wind_dir': '东北风', 'wind_value': '2级'},
     #      {'date': '2019-06-30', 'ht': '23', 'lt': '13', 'weather': '晴', 'wind_dir': '东北风', 'wind_value': '2级'}]
     # write_csv('a', d)
-    import time
-
-
     @create_log_decorator('test')
     def test(a, b, o):
         print(a + b)
