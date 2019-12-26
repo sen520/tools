@@ -25,23 +25,6 @@ def write_csv(name, data_list):
             writer.writerow(data)
 
 
-def utc2local(utc_st):
-    """UTC时间转本地时间(+8:00)"""
-    now_stamp = time.time()
-    local_time = datetime.datetime.fromtimestamp(now_stamp)
-    utc_time = datetime.datetime.utcfromtimestamp(now_stamp)
-    offset = local_time - utc_time
-    local_st = utc_st + offset
-    return local_st
-
-
-def local2utc(local_st):
-    """本地时间转UTC时间(-8:00)"""
-    time_struct = time.mktime(local_st.timetuple())
-    utc_st = datetime.datetime.utcfromtimestamp(time_struct)
-    return utc_st
-
-
 def data_to_json(data, name):
     with io.open(name + '.json', 'w', encoding='utf-8') as fo:
         fo.write(json.dumps(data, ensure_ascii=False, indent=2, separators=(',', ': ')))
@@ -55,10 +38,10 @@ def pwd_hash(string):
     return x.hexdigest()
 
 
-def password():
+def set_random_string(length):
     """生成随机数"""
     ret = ''
-    for i in range(6):
+    for i in range(length):
         num = random.randint(0, 9)
         # num = chr(random.randint(48,57))#ASCII表示数字
         letter_str = 'abcdefghjkmnpqrstuvwxyz'
@@ -167,41 +150,6 @@ def data_to_csv(data_list, csv_key, name):
     df.to_csv(name + '.csv', index=False, encoding='utf-8_sig')
 
 
-def create_logger(name):
-    """
-    create log file
-
-    :param name: file of absolute path
-    :return: log object
-    """
-    log = logging.getLogger(name)
-    log.handlers = []
-    log.setLevel(logging.DEBUG)
-    log.addHandler(logging.FileHandler(name))
-    stream_handler = logging.StreamHandler()
-    stream_handler.setLevel(logging.WARNING)
-    log.addHandler(stream_handler)
-    return log
-
-
-def create_log_decorator(filename='log'):
-    def logger(func):
-        def write_file(*args, **kwargs):
-            log = create_logger(filename + '.log')
-            start_time = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S.%f")
-            log.debug('\nstart time: ' + start_time)
-            log.debug('func: ' + func.__name__ + '\nargs: ' + str(args) + '\nkwargs:' + str(kwargs))
-            try:
-                func(*args, **kwargs)
-            except Exception as e:
-                log.error(e)
-                raise e
-            end_time = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S.%f")
-            log.debug('end time: ' + end_time)
-
-        return write_file
-
-    return logger
 
 
 def table_to_dict(browser):
@@ -255,6 +203,7 @@ if __name__ == '__main__':
     #      {'date': '2019-06-29', 'ht': '20', 'lt': '11', 'weather': '阴', 'wind_dir': '东北风', 'wind_value': '2级'},
     #      {'date': '2019-06-30', 'ht': '23', 'lt': '13', 'weather': '晴', 'wind_dir': '东北风', 'wind_value': '2级'}]
     # write_csv('a', d)
+    from log.log import create_log_decorator
     @create_log_decorator('test')
     def test(a, b, o):
         print(a + b)
