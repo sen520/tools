@@ -46,3 +46,17 @@ class excel():
         except:
             self.ws.cell(row=row, column=colunm).value = "writefail"
             self.wb.save(self.file)
+
+    # 获取某个单元格颜色，前两位为透明度，ff为完全不透明，00为完全透明
+    def getColor(self, row, col):
+        """
+        :param row:
+        :param col:
+        :return: 单元格值，字体颜色，填充颜色（背景色）
+        """
+        cell = self.ws.cell(row=row, column=col)
+        try:
+            return cell.value, cell.font.color.rgb, cell.fill.start_color.rgb
+        except:
+            return cell.value, ''
+
