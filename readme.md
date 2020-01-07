@@ -28,3 +28,4 @@ tools.js
 other tools
 
 - [docker dry](https://github.com/moncho/dry)
+- gtop(npm i -g gtop)
