@@ -18,7 +18,7 @@ import xlrd
 def write_csv(name, data_list):
     fieldnames = data_list[0]
     print(fieldnames)
-    with open(name + '.csv', mode='w', newline='') as csv_file:
+    with open(name + '.csv', mode='w', newline='', encoding='utf-8-sig') as csv_file:
         writer = csv.DictWriter(csv_file, fieldnames=fieldnames)
         writer.writeheader()
         for data in data_list:
