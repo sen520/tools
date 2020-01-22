@@ -150,8 +150,6 @@ def data_to_csv(data_list, csv_key, name):
     df.to_csv(name + '.csv', index=False, encoding='utf-8_sig')
 
 
-
-
 def table_to_dict(browser):
     result = {}
     for row in browser.find_elements_by_xpath('//table//tr'):
@@ -164,38 +162,6 @@ def table_to_dict(browser):
     return result
 
 
-def read_excel(filename, sheet=None):
-    """
-    read excel and parse every line
-
-    :param name: file of absolute path
-    :return: some dict which is about everyline of list
-    """
-    workbook = xlrd.open_workbook(filename)
-    total_data = []
-    if sheet:
-        sh = workbook.sheet_by_name(sheet)
-        for row in range(0, sh.nrows):
-            row_list = sh.row_values(row)
-            total_data.append(row_list)
-    return parse_list(total_data)
-
-
-def parse_list(data):
-    """
-    parse a list
-    :param data: list
-    :return:
-    """
-    data_list = []
-    for i in range(1, len(data)):
-        data_dict = {}
-        for index, key in enumerate(data[0]):
-            data_dict[key] = data[i][index]
-        data_list.append(data_dict)
-    return data_list
-
-
 if __name__ == '__main__':
     # d = [{'date': '2019-06-01', 'ht': '25', 'lt': '12', 'weather': '多云', 'wind_dir': '西南风', 'wind_value': '5级'},
     #      {'date': '2019-06-27', 'ht': '28', 'lt': '16', 'weather': '多云', 'wind_dir': '西南风', 'wind_value': '4级'},
@@ -204,6 +170,8 @@ if __name__ == '__main__':
     #      {'date': '2019-06-30', 'ht': '23', 'lt': '13', 'weather': '晴', 'wind_dir': '东北风', 'wind_value': '2级'}]
     # write_csv('a', d)
     from log.log import create_log_decorator
+
+
     @create_log_decorator('test')
     def test(a, b, o):
         print(a + b)

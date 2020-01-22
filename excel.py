@@ -1,14 +1,47 @@
 from openpyxl import *
 import pandas as pd
+import xlrd
 
 
-def data_to_excel(data, name, keys=''):
+def write_excel(data, filename, keys=''):
     data_df = pd.DataFrame(data)
     if keys != '':
         data_df.columns = list(keys)
-    writer = pd.ExcelWriter('{}.xlsx'.format(name))
+    writer = pd.ExcelWriter('{}.xlsx'.format(filename))
     data_df.to_excel(writer)
     writer.save()
+
+
+def parse_list(data):
+    """
+    parse a list
+    :param data: list
+    :return:
+    """
+    data_list = []
+    for i in range(1, len(data)):
+        data_dict = {}
+        for index, key in enumerate(data[0]):
+            data_dict[key] = data[i][index]
+        data_list.append(data_dict)
+    return data_list
+
+
+def read_excel(filename, sheet=None):
+    """
+    read excel and parse every line
+
+    :param name: file of absolute path
+    :return: some dict which is about everyline of list
+    """
+    workbook = xlrd.open_workbook(filename)
+    total_data = []
+    if sheet:
+        sh = workbook.sheet_by_name(sheet)
+        for row in range(0, sh.nrows):
+            row_list = sh.row_values(row)
+            total_data.append(row_list)
+    return parse_list(total_data)
 
 
 class excel():
