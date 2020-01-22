@@ -1,6 +1,15 @@
 from openpyxl import *
 
 
+def data_to_excel(data, name, keys=''):
+    data_df = pd.DataFrame(data)
+    if keys != '':
+        data_df.columns = list(keys)
+    writer = pd.ExcelWriter('{}.xlsx'.format(name))
+    data_df.to_excel(writer)
+    writer.save()
+
+
 class excel():
     def __init__(self, file):
         self.file = file
@@ -59,4 +68,3 @@ class excel():
             return cell.value, cell.font.color.rgb, cell.fill.start_color.rgb
         except:
             return cell.value, ''
-
