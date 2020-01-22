@@ -16,3 +16,8 @@ var parse_number = /^-?\d+(?:\.\d*)?(?:e[+\-]?\d+)?$/i;
 var isNumber = (num) => {
   return parse_number.test(num)
 };
+
+
+const moment = require('moment-timezone');
+moment.tz(new Date(), 'Asia/Shanghai');
+
