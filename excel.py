@@ -8,7 +8,7 @@ def write_excel(data, filename, keys=''):
     if keys != '':
         data_df.columns = list(keys)
     writer = pd.ExcelWriter('{}.xlsx'.format(filename))
-    data_df.to_excel(writer)
+    data_df.to_excel(writer, index=None)
     writer.save()
 
 
