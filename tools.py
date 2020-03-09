@@ -16,6 +16,20 @@ import csv
 import xlrd
 import inspect
 import ctypes
+import pyaudio
+from threading import Thread
+
+
+def async_utils(f):
+    '''
+    异步装饰器
+    '''
+
+    def wrapper(*args, **kwargs):
+        thr = Thread(target=f, args=args, kwargs=kwargs)
+        thr.start()
+
+    return wrapper
 
 
 def write_csv(name, data_list):
@@ -218,6 +232,20 @@ def port_is_used(port, ip='127.0.0.1'):
     except:
         print('%s:%d is unused' % (ip, port))
         return False
+
+
+def get_device():
+    '''
+    获取当前音频设备
+    '''
+    device_list = []
+    p = pyaudio.PyAudio()
+    for i in range(p.get_device_count()):
+        devInfo = p.get_device_info_by_index(i)
+        if devInfo['maxInputChannels'] == 0 or devInfo['hostApi'] != 0:
+            continue
+        device_list.append({'index': i, 'name': devInfo['name']})
+    return sorted(device_list, key=lambda e: e.__getitem__('index'))
 
 
 if __name__ == '__main__':
