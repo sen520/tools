@@ -7,12 +7,15 @@ import random
 import re
 import datetime
 import os
+import socket
 import time
 
 import pandas as pd
 import requests
 import csv
 import xlrd
+import inspect
+import ctypes
 
 
 def write_csv(name, data_list):
@@ -160,6 +163,61 @@ def table_to_dict(browser):
         value = columns[1].text
         result[key] = value
     return result
+
+
+def killport(port):
+    """
+    按端口号杀进程
+    :param port:
+    :return:
+    """
+    # 查找端口的pid
+    find_port = 'netstat -aon | findstr %s' % str(port)
+    result = os.popen(find_port)
+    text = result.read()
+    pid = text.strip().split(' ')[-1]
+    # 占用端口的pid
+    find_kill = 'taskkill -f -pid %s' % pid
+    print(find_kill)
+    result = os.popen(find_kill)
+    return result.read()
+
+
+def _async_raise(tid, exctype):
+    """raises the exception, performs cleanup if needed"""
+    tid = ctypes.c_long(tid)
+    if not inspect.isclass(exctype):
+        exctype = type(exctype)
+    res = ctypes.pythonapi.PyThreadState_SetAsyncExc(tid, ctypes.py_object(exctype))
+    if res == 0:
+        raise ValueError("invalid thread id")
+    elif res != 1:
+        # """if it returns a number greater than one, you're in trouble,
+        # and you should call it again with exc=NULL to revert the effect"""
+        ctypes.pythonapi.PyThreadState_SetAsyncExc(tid, None)
+        raise SystemError("PyThreadState_SetAsyncExc failed")
+
+
+def stop_thread(thread):
+    '''
+    系统停止线程
+    '''
+    _async_raise(thread.ident, SystemExit)
+
+
+def port_is_used(port, ip='127.0.0.1'):
+    '''
+    检查端口是否占用
+    '''
+    s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+    try:
+        s.connect((ip, port))
+        s.shutdown(2)
+        print('%s:%d is used' % (ip, port))
+        return True
+    except:
+        print('%s:%d is unused' % (ip, port))
+        return False
 
 
 if __name__ == '__main__':
